@@ -1,0 +1,31 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+  html {
+    font-family: "Cinzel", serif;
+    font-family: "Poppins", sans-serif;
+    font-family: "Roboto Serif", serif;
+    font-family: "Montserrat", sans-serif;
+    background-color: white
+  }
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: white; /* Set your custom scrollbar thumb color */
+  border-radius: 6px; /* Optional: Round the corners of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Set your custom scrollbar track color */
+}
+@media (min-width: 1024px) { /* Adjust the breakpoint as needed */
+  .lg-video {
+    height: 312px; /* Height for larger devices */
+    width: 676px;  /* Width for larger devices */
+  }
+}
