@@ -1,6 +1,8 @@
+require("dotenv").config
 const mongoose = require("mongoose")
 
-const uri = "mongodb://127.0.0.1:27017/linkHub";
+
+const uri = process.env.MONGODB_URI;
 mongoose.connect(uri);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));

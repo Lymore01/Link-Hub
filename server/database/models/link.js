@@ -1,6 +1,4 @@
 
-// Hello there senior dev
-// hello junior dev
 const mongoose = require("mongoose");
 
 const linkSchema = new mongoose.Schema(

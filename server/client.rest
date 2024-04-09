@@ -1,1 +1,7 @@
-GET http://localhost:6600/
+POST http://localhost:6600/user/login
+Content-Type: application/json
+
+{
+    "email":"Kelly@gmail.com",
+    "password":"kelly123"
+}
