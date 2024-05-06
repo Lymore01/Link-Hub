@@ -1,24 +1,24 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { links } from "../../utils/links";
 import { socialMediaPhone } from "../../utils/SocialMediaIcons";
 import LinkCardPhone from "../common/LinkCardPhone";
 import { IoMdNotifications } from "react-icons/io";
 import { GoShare } from "react-icons/go";
-import axios from 'axios'
+import axios from "axios";
 
-const PhoneMockup = ({visibility, width, content}) => {
-
-  
+const PhoneMockup = ({ visibility, width, content }) => {
   return (
     <>
-      <div className={`${visibility} sm:flex md:flex w-[100%] sm:w-[40%] items-center justify-center drop-shadow-lg`}>
+      <div
+        className={`${visibility} sm:flex md:flex w-[100%] sm:w-[40%] items-center justify-center drop-shadow-lg`}
+      >
         <div
           className={`w-[${width}] h-[80%] rounded-2xl border-[4px] border-black flex flex-col items-center justify-start p-8 gap-[20px] overflow-y-scroll bg-cover bg-center bg-[rgba(0,0,0,0.5)] drop-shadow-lg`}
           style={{
             backgroundImage:
-              "url(https://www.astronomy.com/wp-content/uploads/sites/2/2023/09/underfullmoon.jpeg)",
+              "url(https://images.pexels.com/photos/352505/pexels-photo-352505.jpeg?auto=compress&cs=tinysrgb&w=600)",
           }}
         >
           <div className=" w-full items-end justify-between flex">
@@ -63,52 +63,51 @@ const PhoneMockup = ({visibility, width, content}) => {
 
           <div></div>
           <div className="flex flex-col gap-[10px]">
-            {content == null?(
+            {content == null ? (
               <>
-              {links.map((link) => {
-                return (
-                  <>
-                    {link.link == "" ? (
-                      <LinkCardPhone
-                        title={link.title}
-                        background={"transparent"}
-                        textColor={"white"}
-                      />
-                    ) : (
-                      <LinkCardPhone
-                        title={link.title}
-                        background={"white"}
-                        textColor={"black"}
-                      />
-                    )}
-                  </>
-                );
-              })}
+                {links.map((link) => {
+                  return (
+                    <>
+                      {link.link == "" ? (
+                        <LinkCardPhone
+                          title={link.title}
+                          background={"transparent"}
+                          textColor={"white"}
+                        />
+                      ) : (
+                        <LinkCardPhone
+                          title={link.title}
+                          background={"white"}
+                          textColor={"black"}
+                        />
+                      )}
+                    </>
+                  );
+                })}
               </>
-            ):(
+            ) : (
               <>
-              {content.map((link) => {
-                return (
-                  <>
-                    {link.link == "" ? (
-                      <LinkCardPhone
-                        title={link.title}
-                        background={"transparent"}
-                        textColor={"white"}
-                      />
-                    ) : (
-                      <LinkCardPhone
-                        title={link.title}
-                        background={"white"}
-                        textColor={"black"}
-                      />
-                    )}
-                  </>
-                );
-              })}
+                {content.map((link) => {
+                  return (
+                    <>
+                      {link.link == "" ? (
+                        <LinkCardPhone
+                          title={link.title}
+                          background={"transparent"}
+                          textColor={"white"}
+                        />
+                      ) : (
+                        <LinkCardPhone
+                          title={link.title}
+                          background={"white"}
+                          textColor={"black"}
+                        />
+                      )}
+                    </>
+                  );
+                })}
               </>
             )}
-           
           </div>
         </div>
       </div>

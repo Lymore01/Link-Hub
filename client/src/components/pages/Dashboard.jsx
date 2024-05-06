@@ -24,6 +24,7 @@ import { useDashView } from "../../contexts/DashView";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Modal from "../../utils/Modal";
+import Analytics from "./Analytics";
 
 const Dashboard = ({ editCardDetail }) => {
   const [preview, setPreview] = useState(false);
@@ -37,6 +38,7 @@ const Dashboard = ({ editCardDetail }) => {
   const [isAddOpen, setAddIsOpen] = useState(false);
   const [addLink, setAddLink] = useState(false);
   const [profileInfo, setProfileInfo] = useState([]);
+  const [sessionUserId, setSessionUserId] = useState("");
 
   const dashItem = useDashView();
   const dashItemValue = dashItem.dashItem;
@@ -96,14 +98,27 @@ const Dashboard = ({ editCardDetail }) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:6600/user/profile/${location.state.id._id}`)
-      .then((response) => {
-        console.log(response.data)
-        setProfileInfo(response.data);
-      })
-      .catch((err) => console.error(err));
-  }, [location]);
+    const sessionUserIdFromStorage = sessionStorage.getItem("userSession_Id");
+    if (sessionUserIdFromStorage) {
+      setSessionUserId(sessionUserIdFromStorage);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sessionUserId) {
+      axios
+        .get(`http://localhost:6600/user/profile/${sessionUserId}`)
+        .then((response) => {
+          setProfileInfo(response.data);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [sessionUserId]);
+
+  useEffect(() => {
+    console.log("login");
+    console.log(sessionUserId);
+  }, [sessionUserId]);
 
   return (
     <>
@@ -115,130 +130,131 @@ const Dashboard = ({ editCardDetail }) => {
             <>
               <Profile />
             </>
+          ) : dashItemValue == "Analytics" ? (
+            <Analytics />
           ) : (
             <>
-              <div className="h-screen w-full flex flex-row p-4 overflow-y-scroll">
-                {/* div one */}
-                <div className="w-[100%] sm:w-[60%] p-4 sm:p-8 flex flex-col gap-[40px]">
-                  <div className="flex flex-col sm:flex-row gap-[20px] sm:gap-[40px]">
-                    <div className="flex-row sm:flex-col flex justify-between">
-                      <div className="w-[60px] h-[60px] rounded-full">
-                        <img
-                          className="w-full h-full object-cover rounded-full"
-                          src={profileInfo[0].photo}
-                        ></img>
-                      </div>
-                      <div
-                        className="h-[30px] flex sm:hidden items-center justify-center"
-                        onClick={handlePreview}
-                      >
-                        <button className="w-[100px] h-[30px] bg-[#3f51b5] text-[whitesmoke] rounded-md font-bold">
-                          Preview
-                        </button>
-                      </div>
-                    </div>
-                    <div className="justify-center flex flex-col items-start gap-[10px]">
-                      <span className="text-[12px] font-bold">Title</span>
-                      <div className="border-[2px] border-[#ff6e40] border-t-0 border-l-0 border-r-0 w-full sm:w-[200px] font-semibold justify-between flex">
-                        <span className="text-[14px]">
-                          {profileInfo[0].username}
-                        </span>
-                        <span>
-                          <MdEditSquare className="cursor-pointer" />
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="justify-center flex flex-col items-start gap-[10px]">
-                      <span className="text-[12px] font-bold">Bio</span>
-                      <div className="border-[2px] border-[#ff6e40] border-t-0 border-l-0 border-r-0 w-full sm:w-[200px] font-semibold flex justify-between">
-                        <span className="text-[14px]">
-                          {profileInfo[0].bio}
-                        </span>
-                        <span>
-                          <MdEditSquare className="cursor-pointer" />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full">
-                    <div className="w-[60%] md:w-[30%] h-auto items-center flex justify-start flex-row gap-[15px]">
-                      {socialMedia.map((socials) => {
-                        return (
-                          <>
+              {profileInfo.map((info) => {
+                return (
+                  <>
+                    <div className="h-screen w-full flex flex-row p-4 overflow-y-scroll">
+                      {/* div one */}
+                      <div className="w-[100%] sm:w-[60%] p-4 sm:p-8 flex flex-col gap-[40px]">
+                        <div className="flex flex-col sm:flex-row gap-[20px] sm:gap-[40px]">
+                          <div className="flex-row sm:flex-col flex justify-between">
+                            <div className="w-[60px] h-[60px] rounded-full">
+                              <img
+                                className="w-full h-full object-cover rounded-full"
+                                src="https://cdn.standardmedia.co.ke/sdemedia/sdeimages/wednesday/badfqvqvat1n601a75fce180c.jpg"
+                              ></img>
+                            </div>
                             <div
-                              className="w-[35px] h-[35px] bg-[#ff6e40] rounded-full items-center justify-center flex cursor-pointer"
-                              key={socials.id}
+                              className="h-[30px] flex sm:hidden items-center justify-center"
+                              onClick={handlePreview}
                             >
+                              <button className="w-[100px] h-[30px] bg-[#3f51b5] text-[whitesmoke] rounded-md font-bold">
+                                Preview
+                              </button>
+                            </div>
+                          </div>
+                          <div className="justify-center flex flex-col items-start gap-[10px]">
+                            <span className="text-[12px] font-bold">Title</span>
+                            <div className="border-[2px] border-[#ff6e40] border-t-0 border-l-0 border-r-0 w-full sm:w-[200px] font-semibold justify-between flex">
+                              <span className="text-[14px]">
+                                {info.username}
+                              </span>
                               <span>
-                                {profileInfo[0].socialMedia == "Whatsapp" &&
-                                socials.title == "Whatsapp"
-                                  ? socials.icon
-                                  : "None"}
+                                <MdEditSquare className="cursor-pointer" />
                               </span>
                             </div>
-                          </>
-                        );
-                      })}
-                      <div className="w-[35px] h-[35px] bg-[#ff6e40] rounded-full items-center justify-center flex cursor-pointer">
-                        <span>{profileInfo.socialMedia == "Whatsapp"}</span>
-                      </div>
-                      <motion.div
-                        layoutId="socialMediaAdd"
-                        className="w-[35px] h-[35px] bg-[#3f51b5] rounded-full items-center justify-center flex cursor-pointer"
-                        onClick={handleAddClick}
-                      >
-                        <span>
-                          <IoAdd className="fill-white" />
-                        </span>
-                      </motion.div>
-                    </div>
-                  </div>
+                          </div>
 
-                  <div className="w-full h-[450px] sm:h-[350px] overflow-y-scroll p-0 sm:p-4">
-                    <motion.div
-                      className="w-full p-2 justify-end items-end flex"
-                      layoutId="addLink"
-                      onClick={handleAddLink}
-                    >
-                      <span className="text-[12px] font-semibold">
-                        <IoAdd className="w-[26px] h-[26px] cursor-pointer fill-black" />
-                      </span>
-                    </motion.div>
-                    {Items.map((link) => {
-                      return (
-                        <>
-                          <LinkCard
-                            linkDescription={link.title}
-                            link={link.link}
-                            layoutId={"linkCard"}
-                            onDragOver={(event) => handleDragOver(event, link)}
-                            onDrop={handleDrop}
-                            onDragStart={(event) =>
-                              handleDragStart(event, link)
-                            }
-                            onDragEnd={handleDragEnd}
-                            onClick={() => {
-                              handleCardClick(link.id);
-                            }}
-                          />
-                        </>
-                      );
-                    })}
-                  </div>
-                  <div className="mt-[-20px] mb-[-20px] flex w-full justify-end">
-                    <button className="w-[100px] h-[30px] bg-[#3f51b5] text-[whitesmoke] rounded-md font-bold">
-                      Save
-                    </button>
-                  </div>
-                </div>
-                {/* Div two */}
-                <PhoneMockup
-                  visibility={"hidden"}
-                  width={"55%"}
-                  content={Items}
-                />
-              </div>
+                          <div className="justify-center flex flex-col items-start gap-[10px]">
+                            <span className="text-[12px] font-bold">Bio</span>
+                            <div className="border-[2px] border-[#ff6e40] border-t-0 border-l-0 border-r-0 w-full sm:w-[200px] font-semibold flex justify-between">
+                              <span className="text-[14px]">{info.bio}</span>
+                              <span>
+                                <MdEditSquare className="cursor-pointer" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-full">
+                          <div className="w-[60%] md:w-[30%] h-auto items-center flex justify-start flex-row gap-[15px]">
+                            {socialMedia
+                              .filter(
+                                (socials) => info.socialMedia === socials.title
+                              )
+                              .map((filteredSocial) => (
+                                <div
+                                  className="w-[35px] h-[35px] bg-[#ff6e40] rounded-full items-center justify-center flex cursor-pointer"
+                                  key={filteredSocial.id}
+                                >
+                                  <span>{filteredSocial.icon}</span>
+                                </div>
+                              ))}
+
+                            <motion.div
+                              layoutId="socialMediaAdd"
+                              className="w-[35px] h-[35px] bg-[#3f51b5] rounded-full items-center justify-center flex cursor-pointer"
+                              onClick={handleAddClick}
+                            >
+                              <span>
+                                <IoAdd className="fill-white" />
+                              </span>
+                            </motion.div>
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[450px] sm:h-[350px] overflow-y-scroll p-0 sm:p-4">
+                          <motion.div
+                            className="w-full p-2 justify-end items-end flex"
+                            layoutId="addLink"
+                            onClick={handleAddLink}
+                          >
+                            <span className="text-[12px] font-semibold">
+                              <IoAdd className="w-[26px] h-[26px] cursor-pointer fill-black" />
+                            </span>
+                          </motion.div>
+                          {Items.map((link) => {
+                            return (
+                              <>
+                                <LinkCard
+                                  linkDescription={link.title}
+                                  link={link.link}
+                                  layoutId={"linkCard"}
+                                  onDragOver={(event) =>
+                                    handleDragOver(event, link)
+                                  }
+                                  onDrop={handleDrop}
+                                  onDragStart={(event) =>
+                                    handleDragStart(event, link)
+                                  }
+                                  onDragEnd={handleDragEnd}
+                                  onClick={() => {
+                                    handleCardClick(link.id);
+                                  }}
+                                />
+                              </>
+                            );
+                          })}
+                        </div>
+                        <div className="mt-[-20px] mb-[-20px] flex w-full justify-end">
+                          <button className="w-[100px] h-[30px] bg-[#3f51b5] text-[whitesmoke] rounded-md font-bold">
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                      {/* Div two */}
+                      <PhoneMockup
+                        visibility={"hidden"}
+                        width={"55%"}
+                        content={Items}
+                      />
+                    </div>
+                  </>
+                );
+              })}
             </>
           )}
         </div>

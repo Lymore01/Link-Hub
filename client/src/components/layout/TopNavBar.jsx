@@ -4,12 +4,15 @@ import { MdContentCopy } from "react-icons/md";
 import { IoMdMenu } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 import { motion } from "framer-motion";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
+import { useDashView } from "../../contexts/DashView";
 
 const TopNavBar = () => {
-  const linkRef = useRef()
+  const linkRef = useRef();
   const [open, setOpen] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const { dashItem, setDashItem } = useDashView();
 
   const handleMenu = (e) => {
     e.preventDefault();
@@ -20,7 +23,7 @@ const TopNavBar = () => {
     try {
       await navigator.clipboard.writeText(linkRef.current.innerHTML);
       setCopySuccess(true);
-      alert("Copied to clipboard!")
+      alert("Copied to clipboard!");
     } catch (error) {
       console.error("Failed to copy:", error);
       setCopySuccess(false);
@@ -46,9 +49,12 @@ const TopNavBar = () => {
             <span className="text-[12px] font-[600] cursor-pointer text-[#333333]">
               Design
             </span>
-            <span className="text-[12px] font-[600] cursor-pointer text-[#333333]">
-              Analytics
-            </span>
+            <Link to={"/analytics"}>
+              <span className="text-[12px] font-[600] cursor-pointer text-[#333333]">
+                Analytics
+              </span>
+            </Link>
+
             <span className="text-[12px] font-[600] cursor-pointer text-[#333333]">
               Settings
             </span>
@@ -62,12 +68,11 @@ const TopNavBar = () => {
                 linktr.ee/femi-One
               </span>
             </div>
-            <div className="items-center justify-center flex" onClick={() => copyToClipboard()}>
-              <MdContentCopy
-                className="cursor-pointer"
-                
-              />
-              
+            <div
+              className="items-center justify-center flex"
+              onClick={() => copyToClipboard()}
+            >
+              <MdContentCopy className="cursor-pointer" />
             </div>
           </div>
         </div>
