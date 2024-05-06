@@ -19,5 +19,8 @@ userRoute.post(
   passport.authenticate("local"),
   userController.loginUser
 );
+userRoute.get("/profile", userController.getUserProfile);
+userRoute.get("/profile/:id", userController.getUserProfileByUserId);
+userRoute.post("/post-profile", userController.postUserProfile);
 
 module.exports = userRoute;

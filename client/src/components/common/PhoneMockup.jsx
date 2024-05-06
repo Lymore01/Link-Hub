@@ -1,13 +1,16 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React,{useEffect} from "react";
 import { links } from "../../utils/links";
 import { socialMediaPhone } from "../../utils/SocialMediaIcons";
 import LinkCardPhone from "../common/LinkCardPhone";
 import { IoMdNotifications } from "react-icons/io";
 import { GoShare } from "react-icons/go";
+import axios from 'axios'
 
 const PhoneMockup = ({visibility, width, content}) => {
+
+  
   return (
     <>
       <div className={`${visibility} sm:flex md:flex w-[100%] sm:w-[40%] items-center justify-center drop-shadow-lg`}>

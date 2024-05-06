@@ -6,6 +6,8 @@ import Register from "./components/pages/Register";
 import Dashboard from "./components/pages/Dashboard";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Preview from "./components/pages/Preview";
+import Profile from "./components/pages/Profile";
+import ForgotPassword from "./components/pages/ForgotPassword";
 
 const App = () => {
   return (
@@ -17,6 +19,10 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/preview" element={<Preview />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+
         </Routes>
       </Router>
     </>

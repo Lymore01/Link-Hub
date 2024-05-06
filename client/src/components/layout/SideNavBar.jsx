@@ -1,12 +1,16 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
 import { IoLink } from "react-icons/io5";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import { GrAnnounce } from "react-icons/gr";
 import { MdMessage } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useDashView } from "../../contexts/DashView";
+
 
 const SideNavBar = () => {
+  const { dashItem, setDashItem } = useDashView();
+
   return (
     <>
       <div className="bg-[#ff6e40] w-[5%] sm:w-[4%] h-full flex flex-col items-center justify-between pl-6 pr-6 sm:pl-4 sm:pr-4">
@@ -32,12 +36,17 @@ const SideNavBar = () => {
             <MdMessage className="w-[25px] h-[25px]" fill="#3f51b5" />
           </div>
           <div className="w-full h-auto items-center justify-center flex p-2">
-            <div className="w-[30px] h-[30px] rounded-full items-center justify-center flex border-[2px] border-white">
-              <img
-                className="w-full h-full object-cover rounded-full"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyzglJLzqFumT0k41TMHXT6OZgXaQyiaFTOAleShpS3w&s"
-              ></img>
-            </div>
+            <Link to={"/profile"}>
+              <div
+                className="w-[30px] h-[30px] rounded-full items-center justify-center flex border-[2px] border-white cursor-pointer"
+                
+              >
+                <img
+                  className="w-full h-full object-cover rounded-full"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyzglJLzqFumT0k41TMHXT6OZgXaQyiaFTOAleShpS3w&s"
+                ></img>
+              </div>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,13 +1,50 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoLink } from "react-icons/io5";
 import { icons } from "../../utils/SocialMediaIcons";
 import { FaRegEye } from "react-icons/fa6";
 import { IoArrowBack } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Logo from "../../utils/Logo";
+import { useNavigate } from "react-router-dom";
+import { validationRules } from "../../schema/FormValidation";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import axios from "axios";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (values, formikHelpers) => {
+    console.log("Enter in submit function", values);
+    const { setSubmitting } = formikHelpers;
+
+    try {
+      await axios
+        .post("http://localhost:6600/user/login", {
+          email: values.email,
+          password: values.password,
+        })
+        .then((response) => {
+          if (response.data.message === "User logged in successfully!") {
+            sessionStorage.setItem("userSession_Id", response.data.user._id);
+            navigate("/dashboard", { state: { id: response.data.user._id } });
+            
+          } else if (response.data.message === "You must login!") {
+            navigate("/login");
+          } else {
+            setMessage(response.data.message);
+          }
+          console.log(sessionStorage.getItem("userSession_Id"));
+        });
+      setSubmitting(false);
+    } catch (error) {
+      console.log(error.response.data.message);
+      setMessage(error.response.data.message);
+      setSubmitting(false);
+    }
+  };
+
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center p-2 bg-[#ecf0f1]">
@@ -22,7 +59,9 @@ const Login = () => {
               <Logo />
             </div>
             <div className="w-full h-auto items-center justify-center flex flex-col">
-              <span className="text-[26px] font-extrabold text-[#3f51b5]">Welcome Back!</span>
+              <span className="text-[26px] font-extrabold text-[#3f51b5]">
+                Welcome Back!
+              </span>
               <span className="text-[10px] font-semibold text-[#3f51b5]">
                 Don&apos;t have an account yet?{" "}
                 <Link to={"/register"}>
@@ -51,49 +90,93 @@ const Login = () => {
               <span className="mx-4 text-gray-600">or</span>
               <hr className="flex-grow border-t border-gray-400"></hr>
             </div>
+            {/* form */}
             <div className="sm:w-[60%] w-[80%] h-auto items-center flex justify-start flex-col gap-[20px]">
-              <div className="w-full h-auto">
-                <label htmlFor="email" className="font-semibold text-[12px]">
-                  Email
-                </label>
-                <div className="w-full h-[40px] bg-[#F0F0F0] rounded-[99em] p-2 pl-4">
-                  <input
-                    type="text"
-                    placeholder="E.g. yourname@gmail.com"
-                    className="w-full h-full bg-[transparent] text-[12px] items-center justify-center flex outline-none"
-                  ></input>
-                </div>
-              </div>
-              <div className="w-full h-auto">
-                <label htmlFor="email" className="font-semibold text-[12px]">
-                  Password
-                </label>
-                <div className="w-full h-[40px] bg-[#F0F0F0] rounded-[99em] p-2 pl-4 flex flex-row">
-                  <input
-                    type="password"
-                    placeholder="Enter your password"
-                    className="w-full h-full bg-[transparent] text-[12px] items-center justify-center flex outline-none"
-                  ></input>
-                  <div className="h-full flex items-center justify-center cursor-pointer">
-                    <span className="">
-                      <FaRegEye fill="gray" />
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <Formik
+                initialValues={{
+                  email: "",
+                  password: "",
+                }}
+                onSubmit={handleSubmit}
+                validationSchema={validationRules}
+                validator={() => ({})}
+              >
+                <Form className="w-full flex flex-col gap-[10px]">
+                  <div className="w-full h-auto">
+                    <label
+                      htmlFor="email"
+                      className="font-semibold text-[12px]"
+                    >
+                      Email
+                    </label>
+                    <div className="w-full h-[40px] bg-[#F0F0F0] rounded-[99em] p-2 pl-4">
+                      <Field
+                        type="email"
+                        name="email"
+                        placeholder="E.g. yourname@gmail.com"
+                        className="w-full h-full bg-[transparent] text-[12px] items-center justify-center flex outline-none"
+                      />
+                    </div>
 
-              <div className="w-full h-[40px] bg-[#3f51b5] rounded-[99em] items-center justify-center flex cursor-pointer">
-                <Link to={"/dashboard"}>
-                  <span className="text-[white] items-center justify-center flex font-bold text-[12px]">
-                    Sign In
-                  </span>
-                </Link>
-              </div>
-              <div>
-                <span className="text-[12px] font-bold underline cursor-pointer text-[#ff6e40]">
-                  Forgot password
-                </span>
-              </div>
+                    <ErrorMessage name="email">
+                      {(msg) => (
+                        <div className="text-red-500 text-[12px]">{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </div>
+                  <div className="w-full h-auto">
+                    <label
+                      htmlFor="password"
+                      className="font-semibold text-[12px]"
+                    >
+                      Password
+                    </label>
+                    <div className="w-full h-[40px] bg-[#F0F0F0] rounded-[99em] p-2 pl-4 flex flex-row">
+                      <Field
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        className="w-full h-full bg-[transparent] text-[12px] items-center justify-center flex outline-none"
+                      />
+                      <div className="h-full flex items-center justify-center cursor-pointer">
+                        <span className="">
+                          <FaRegEye fill="gray" />
+                        </span>
+                      </div>
+                    </div>
+
+                    <ErrorMessage name="password">
+                      {(msg) => (
+                        <div className="text-red-500 text-[12px]">{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </div>
+
+                  <div className="w-full h-[40px] bg-[#3f51b5] rounded-[99em] items-center justify-center flex cursor-pointer">
+                    <button
+                      type="submit"
+                      className="w-full h-full rounded-[99em]"
+                    >
+                      <span className="text-[white] items-center justify-center flex font-bold text-[12px]">
+                        Sign In
+                      </span>
+                    </button>
+                  </div>
+                  <div>
+                    <Link
+                      to={"/forgot-password"}
+                      className="text-[12px] font-bold underline cursor-pointer text-[#ff6e40]"
+                    >
+                      Forgot password
+                    </Link>
+                  </div>
+                </Form>
+              </Formik>
+              {message && (
+                <div className="text-red-500 text-xs w-full flex items-center justify-start">
+                  {message}
+                </div>
+              )}
             </div>
           </div>
           <div className="w-full h-full rounded-lg hidden sm:flex">

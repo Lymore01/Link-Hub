@@ -1,7 +1,35 @@
+GET http://localhost:6600/user/all
+###
 POST http://localhost:6600/user/login
 Content-Type: application/json
 
 {
-    "email":"Kelly@gmail.com",
-    "password":"kelly123"
+    "email":"kelly@gmail.com",
+    "password":"kelly@123"
 }
+
+###
+POST http://localhost:6600/user/post-user
+Content-Type: application/json
+
+{
+    "email":"kelly@gmail.com",
+    "password":"kelly@123"
+}
+
+###
+POST http://localhost:6600/user/post-profile
+Content-Type: application/json
+
+{
+    "username":"lymore",
+    "bio":"kenya",
+    "socialMedia":["facebook","instagram"]
+   
+}
+
+###
+GET http://localhost:6600/user/profile
+
+###
+GET http://localhost:6600/user/profile/:id
