@@ -5,10 +5,11 @@
 @layer base {
   html {
     font-family: "Cinzel", serif;
-    font-family: "Poppins", sans-serif;
     font-family: "Roboto Serif", serif;
+    font-family: "Poppins", sans-serif;
+    font-family: "Lato", sans-serif;
     font-family: "Montserrat", sans-serif;
-    background-color: white
+    background-color: white;
   }
 }
 ::-webkit-scrollbar {
@@ -16,16 +17,17 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: white; /* Set your custom scrollbar thumb color */
+  background-color: transparent; /* Set your custom scrollbar thumb color */
   border-radius: 6px; /* Optional: Round the corners of the scrollbar thumb */
 }
 
 ::-webkit-scrollbar-track {
   background-color: transparent; /* Set your custom scrollbar track color */
 }
-@media (min-width: 1024px) { /* Adjust the breakpoint as needed */
+@media (min-width: 1024px) {
+  /* Adjust the breakpoint as needed */
   .lg-video {
     height: 312px; /* Height for larger devices */
-    width: 676px;  /* Width for larger devices */
+    width: 676px; /* Width for larger devices */
   }
 }

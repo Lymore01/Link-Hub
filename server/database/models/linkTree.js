@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
 
 const linkTreeSchema = new mongoose.Schema({
+  title:{
+    type:String
+  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  title: { type: String, required: true },
+  links:[
+    {type: mongoose.Schema.Types.ObjectId, ref: 'Link', required: true }
+  ],
 }, { timestamps: true });
 
 const LinkTree = mongoose.model('LinkTree', linkTreeSchema);
